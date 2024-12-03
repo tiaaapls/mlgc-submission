@@ -55,16 +55,17 @@ async function getHistoriesHandler(request, h) {
             id: doc.id,
             history: doc.data(),
         }));
-    
+        
         return h.response({
             status: 'success',
             data: histories,
-        });
+        }).code(200);
     } catch (error) {
+        console.error("Error in getHistoriesHandler:", error);
         return h.response({
             status: 'fail',
             message: 'Gagal mengambil data riwayat prediksi.',
-        }).code(500);
+        }).code(500); 
     }
 }
    
