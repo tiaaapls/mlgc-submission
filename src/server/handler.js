@@ -25,28 +25,23 @@ async function postPredictHandler(request, h) {
             "result": label,
             "suggestion": suggestion,
             "createdAt": createdAt
-        };
-        
-        try {
-            await storeData(id, data);
-        } catch (error) {
-            return h.response({
-                status: 'fail',
-                message: 'Terjadi kesalahan saat menyimpan data prediksi',
-            }).code(500);
         }
 
-        return h.response({
+        await storeData(id, data);
+
+        const response = h.response({
             status: 'success',
             message: 'Model is predicted successfully',
             data
-        }).code(201);
-
-    } catch (error) {  
+        });
+        response.code(201);
+        return response;
+    } catch (error) {
+        console.error("Error in postPredictHandler:", error);
         return h.response({
             status: 'fail',
-            message: 'Terjadi kesalahan dalam melakukan prediksi',
-        }).code(400);
+            message: error.message || 'Terjadi kesalahan dalam melakukan prediksi',
+        }).code(400); 
     }
 }
 
